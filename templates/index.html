@@ -1,195 +1,286 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 
 <head>
     <meta charset="UTF-8" />
-    <title>AI Resume & JD Analyzer</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
+    <title>ResumeMatch AI – ATS Resume & JD Analyzer</title>
 
-        .container {
-            max-width: 1000px;
-            margin: 30px auto;
-            background: #ffffff;
-            padding: 20px 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 5px;
-        }
-
-        h2 {
-            margin-top: 30px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #777;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        textarea {
-            width: 100%;
-            min-height: 150px;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-family: inherit;
-            font-size: 14px;
-            resize: vertical;
-        }
-
-        label {
-            font-weight: bold;
-            display: block;
-            margin-top: 15px;
-        }
-
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            background: #2563eb;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        button:disabled {
-            background: #999;
-            cursor: not-allowed;
-        }
-
-        .results {
-            margin-top: 30px;
-            padding: 15px;
-            border-radius: 8px;
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 9999px;
-            background: #eff6ff;
-            color: #1d4ed8;
-            font-size: 13px;
-            margin-right: 6px;
-            margin-bottom: 4px;
-        }
-
-        .score-circle {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            border: 6px solid #22c55e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .row {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .col {
-            flex: 1 1 300px;
-        }
-
-        pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            background: #f3f4f6;
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-    </style>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['system-ui', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
 </head>
 
-<body>
-    <div class="container">
-        <h1>AI Resume & JD Analyzer</h1>
-        <p class="subtitle">Paste your resume and job description. Get ATS score, missing skills, summary, cover letter
-            & interview questions.</p>
+<body class="h-full bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300">
+    <div class="min-h-screen flex flex-col">
 
-        <label for="resume">Resume Text</label>
-        <input type="file" id="resumeFile" accept=".pdf,.docx" />
-        <small>You can upload a PDF/DOCX or paste your resume below.</small>
-        <textarea id="resume" placeholder="Paste your resume content here..."></textarea>
-
-
-        <label for="jd">Job Description</label>
-        <textarea id="jd" placeholder="Paste the job description here..."></textarea>
-
-        <button id="analyzeBtn">Analyze Resume</button>
-
-        <div id="status"></div>
-
-        <div id="results" class="results" style="display:none;">
-            <div class="row">
-                <div class="col">
-                    <h2>ATS Match Score</h2>
-                    <div class="score-circle" id="scoreCircle">0%</div>
+        <!-- Top Bar -->
+        <header
+            class="border-b border-slate-200/70 dark:border-slate-700/70 bg-white/80 dark:bg-slate-900/80 backdrop-blur">
+            <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <div
+                        class="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 via-sky-500 to-emerald-400 flex items-center justify-center text-white font-bold text-lg shadow-md">
+                        R
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold tracking-tight">ResumeMatch AI</h1>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">
+                            ATS-style Resume & JD Analyzer
+                        </p>
+                    </div>
                 </div>
-                <div class="col">
-                    <h2>Missing Skills</h2>
-                    <div id="missingSkills"></div>
-                </div>
+
+                <!-- Theme toggle -->
+                <button id="themeToggle"
+                    class="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1.5 text-xs font-medium shadow-sm bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                    <span id="themeIcon">🌙</span>
+                    <span id="themeLabel">Dark mode</span>
+                </button>
             </div>
+        </header>
 
-            <h2>Suggested Keywords</h2>
-            <div id="suggestedKeywords"></div>
+        <!-- Main -->
+        <main class="flex-1">
+            <div class="max-w-6xl mx-auto px-4 py-8 lg:py-10 space-y-6">
 
-            <h2>
-                Resume Summary
-                <button type="button" id="copySummaryBtn" style="margin-left:10px; font-size:12px;">Copy</button>
-            </h2>
-            <pre id="resumeSummary"></pre>
+                <!-- Intro -->
+                <section class="text-center space-y-2">
+                    <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">
+                        Optimize your resume for every job in seconds
+                    </h2>
+                    <p class="text-sm md:text-base text-slate-500 dark:text-slate-400 max-w-3xl mx-auto">
+                        Upload your resume and paste a Job Description. Get ATS-style match score, missing skills,
+                        keyword suggestions, tailored summary, cover letter, action plan, full rewritten resume, and
+                        interview Q&A – ideal for Data / MIS and Jewellery & QC roles.
+                    </p>
+                </section>
 
-            <h2>
-                Cover Letter
-                <button type="button" id="copyCoverBtn" style="margin-left:10px; font-size:12px;">Copy</button>
-            </h2>
-            <pre id="coverLetter"></pre>
+                <!-- Inputs + Results -->
+                <section class="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
 
-            <h2>
-                Interview Questions
-                <button type="button" id="copyQuestionsBtn" style="margin-left:10px; font-size:12px;">Copy</button>
-            </h2>
-            <ul id="questionsList"></ul>
+                    <!-- LEFT: Inputs -->
+                    <div
+                        class="bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm p-4 md:p-5 space-y-4">
+                        <h3 class="text-base md:text-lg font-semibold flex items-center gap-2">
+                            <span
+                                class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 text-xs font-bold">1</span>
+                            Provide your Resume & Job Description
+                        </h3>
 
-        </div>
+                        <!-- Resume file -->
+                        <div class="space-y-2">
+                            <label class="text-xs font-medium text-slate-600 dark:text-slate-300">
+                                Resume File (PDF or DOCX)
+                            </label>
+                            <div
+                                class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 bg-slate-50/80 dark:bg-slate-800/60">
+                                <input type="file" id="resumeFile" accept=".pdf,.docx"
+                                    class="text-xs text-slate-600 dark:text-slate-200 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-indigo-500 file:text-white hover:file:bg-indigo-600 cursor-pointer" />
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                                    Optional: upload your resume file. We’ll auto-fill the text area below.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Resume text -->
+                        <div class="space-y-2">
+                            <label for="resumeText" class="text-xs font-medium text-slate-600 dark:text-slate-300">
+                                Resume Text
+                            </label>
+                            <textarea id="resumeText"
+                                class="w-full min-h-[150px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-900/60 px-3 py-2 text-xs md:text-sm outline-none focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 resize-vertical"
+                                placeholder="Paste your resume content here if you don't upload a file..."></textarea>
+                        </div>
+
+                        <!-- JD text -->
+                        <div class="space-y-2">
+                            <label for="jdText" class="text-xs font-medium text-slate-600 dark:text-slate-300">
+                                Job Description
+                            </label>
+                            <textarea id="jdText"
+                                class="w-full min-h-[140px] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-900/60 px-3 py-2 text-xs md:text-sm outline-none focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 resize-vertical"
+                                placeholder="Paste the JD from Naukri / LinkedIn / company website..."></textarea>
+                        </div>
+
+                        <!-- Company -->
+                        <div class="space-y-2">
+                            <label for="companyName" class="text-xs font-medium text-slate-600 dark:text-slate-300">
+                                Target Company (optional)
+                            </label>
+                            <input id="companyName" type="text"
+                                class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-900/60 px-3 py-2 text-xs md:text-sm outline-none focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500"
+                                placeholder="e.g. TCS, Titan, Teleperformance, CaratLane..." />
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                                We will adapt your resume & suggestions for this company's style and expectations.
+                            </p>
+                        </div>
+
+                        <!-- Status -->
+                        <p id="status" class="text-[11px] text-slate-500 dark:text-slate-400 min-h-[16px]"></p>
+
+                        <!-- Buttons -->
+                        <div class="flex flex-wrap gap-2">
+                            <button id="analyzeBtn"
+                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 shadow-sm transition disabled:bg-slate-400 disabled:cursor-not-allowed disabled:shadow-none">
+                                <span>Analyze Resume</span>
+                                <span class="text-lg leading-none">⚡</span>
+                            </button>
+
+                            <button id="resetBtn"
+                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 text-sm font-medium px-4 py-2 border border-slate-200 dark:border-slate-700">
+                                🔄 New Analysis
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: Results -->
+                    <div id="resultsSection"
+                        class="hidden bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm p-4 md:p-5 space-y-5">
+
+                        <!-- Score + tags -->
+                        <div class="grid sm:grid-cols-[auto,1fr] gap-4 items-start">
+                            <div class="flex flex-col items-center justify-center">
+                                <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1">
+                                    ATS Match Score
+                                </p>
+                                <div
+                                    class="flex items-center justify-center rounded-full border-4 border-emerald-400/90 dark:border-emerald-400/80 h-24 w-24 bg-emerald-50/80 dark:bg-emerald-900/30 shadow-inner">
+                                    <span id="scoreCircle"
+                                        class="text-xl font-bold text-emerald-700 dark:text-emerald-300">0%</span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-xs font-semibold text-slate-600 dark:text-slate-200 mb-1">
+                                        Missing Skills
+                                    </p>
+                                    <div id="missingSkills" class="flex flex-wrap gap-1.5 text-[11px]"></div>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-semibold text-slate-600 dark:text-slate-200 mb-1">
+                                        Suggested Keywords
+                                    </p>
+                                    <div id="suggestedKeywords" class="flex flex-wrap gap-1.5 text-[11px]"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Summary -->
+                        <section class="space-y-1">
+                            <div class="flex items-center justify-between gap-2">
+                                <h3 class="text-sm font-semibold">Resume Summary</h3>
+                            </div>
+                            <pre id="resumeSummary"
+                                class="whitespace-pre-wrap break-words text-xs md:text-sm bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2"></pre>
+                        </section>
+
+                        <!-- Cover Letter -->
+                        <section class="space-y-1">
+                            <div class="flex items-center justify-between gap-2">
+                                <h3 class="text-sm font-semibold">Cover Letter</h3>
+                            </div>
+                            <pre id="coverLetter"
+                                class="whitespace-pre-wrap break-words text-xs md:text-sm bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2"></pre>
+                        </section>
+
+                        <!-- Action Plan -->
+                        <section class="space-y-1">
+                            <h3 class="text-sm font-semibold">Action Plan – How to Improve Your Resume</h3>
+                            <ul id="improvementList" class="list-decimal list-inside text-xs md:text-sm space-y-1"></ul>
+                        </section>
+
+                        <!-- Improved Resume -->
+                        <section class="space-y-1">
+                            <div class="flex items-center justify-between gap-2">
+                                <h3 class="text-sm font-semibold">AI-Rewritten ATS-Friendly Resume</h3>
+                            </div>
+                            <pre id="improvedResume"
+                                class="whitespace-pre-wrap break-words text-xs md:text-sm bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2"></pre>
+                        </section>
+
+                        <!-- Interview Q & A -->
+                        <section class="space-y-1">
+                            <h3 class="text-sm font-semibold">Interview Questions & Suggested Answers</h3>
+                            <ul id="questionsList" class="list-disc list-inside text-xs md:text-sm space-y-1"></ul>
+                            <ul id="qaList" class="list-disc list-inside text-xs md:text-sm space-y-2 mt-2"></ul>
+                        </section>
+
+                        <!-- Company Fit -->
+                        <section class="space-y-1">
+                            <h3 class="text-sm font-semibold">Company-Specific Optimization Tips</h3>
+                            <pre id="companyFitNotes"
+                                class="whitespace-pre-wrap break-words text-xs md:text-sm bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2"></pre>
+                        </section>
+                    </div>
+
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="border-t border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur">
+            <div class="max-w-6xl mx-auto px-4 py-3 text-center text-[11px] text-slate-500 dark:text-slate-400">
+                Built by <span class="font-semibold">Mohammed Shahid Shaikh</span> · Beta version ·
+                For personalised resume polishing & interview prep, contact me.
+            </div>
+        </footer>
     </div>
 
+    <!-- JS -->
     <script>
-        const analyzeBtn = document.getElementById("analyzeBtn");
+        // THEME TOGGLE
+        const themeToggleBtn = document.getElementById("themeToggle");
+        const themeIcon = document.getElementById("themeIcon");
+        const themeLabel = document.getElementById("themeLabel");
+
+        function applyTheme(theme) {
+            if (theme === "dark") {
+                document.documentElement.classList.add("dark");
+                themeIcon.textContent = "☀️";
+                themeLabel.textContent = "Light mode";
+            } else {
+                document.documentElement.classList.remove("dark");
+                themeIcon.textContent = "🌙";
+                themeLabel.textContent = "Dark mode";
+            }
+        }
+
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+            applyTheme(savedTheme);
+        } else {
+            const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+            applyTheme(prefersDark ? "dark" : "light");
+        }
+
+        themeToggleBtn.addEventListener("click", () => {
+            const isDark = document.documentElement.classList.contains("dark");
+            const newTheme = isDark ? "light" : "dark";
+            applyTheme(newTheme);
+            localStorage.setItem("theme", newTheme);
+        });
+
         const statusDiv = document.getElementById("status");
-        const resultsDiv = document.getElementById("results");
+        const analyzeBtn = document.getElementById("analyzeBtn");
+        const resetBtn = document.getElementById("resetBtn");
+        const resultsSection = document.getElementById("resultsSection");
 
-        const resumeFileInput = document.getElementById("resumeFile");
-
-        resumeFileInput.addEventListener("change", async () => {
-            const file = resumeFileInput.files[0];
+        // FILE UPLOAD -> /extract_text
+        document.getElementById("resumeFile").addEventListener("change", async () => {
+            const file = document.getElementById("resumeFile").files[0];
             if (!file) return;
-
             statusDiv.textContent = "Reading resume file...";
 
             const formData = new FormData();
@@ -207,7 +298,7 @@
                     throw new Error(data.error || "Failed to extract text");
                 }
 
-                document.getElementById("resume").value = data.text || "";
+                document.getElementById("resumeText").value = data.text || "";
                 statusDiv.textContent = "Resume text loaded from file ✅";
             } catch (err) {
                 console.error(err);
@@ -215,65 +306,48 @@
             }
         });
 
-        function copyText(text) {
-            navigator.clipboard.writeText(text)
-                .then(() => {
-                    statusDiv.textContent = "Copied to clipboard ✅";
-                })
-                .catch(() => {
-                    statusDiv.textContent = "Failed to copy ❌";
-                });
-        }
-
-        document.getElementById("copySummaryBtn").addEventListener("click", () => {
-            const text = document.getElementById("resumeSummary").textContent || "";
-            if (text.trim()) copyText(text);
+        // RESET BUTTON
+        resetBtn.addEventListener("click", () => {
+            document.getElementById("resumeFile").value = "";
+            document.getElementById("resumeText").value = "";
+            document.getElementById("jdText").value = "";
+            document.getElementById("companyName").value = "";
+            resultsSection.classList.add("hidden");
+            statusDiv.textContent = "";
+            window.scrollTo({ top: 0, behavior: "smooth" });
         });
 
-        document.getElementById("copyCoverBtn").addEventListener("click", () => {
-            const text = document.getElementById("coverLetter").textContent || "";
-            if (text.trim()) copyText(text);
-        });
-
-        document.getElementById("copyQuestionsBtn").addEventListener("click", () => {
-            const lis = Array.from(document.querySelectorAll("#questionsList li"));
-            const text = lis.map(li => "- " + li.textContent).join("\n");
-            if (text.trim()) copyText(text);
-        });
-
-
+        // ANALYZE BUTTON
         analyzeBtn.addEventListener("click", async () => {
-            const resumeText = document.getElementById("resume").value.trim();
-            const jdText = document.getElementById("jd").value.trim();
+            const resumeText = document.getElementById("resumeText").value.trim();
+            const jdText = document.getElementById("jdText").value.trim();
+            const companyName = document.getElementById("companyName").value.trim();
 
             if (!resumeText || !jdText) {
-                alert("Please paste both resume and job description.");
+                alert("Please provide both resume and job description.");
                 return;
             }
 
             analyzeBtn.disabled = true;
             statusDiv.textContent = "Analyzing... please wait.";
-            resultsDiv.style.display = "none";
+            resultsSection.classList.add("hidden");
 
             try {
                 const response = await fetch("/analyze", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         resume_text: resumeText,
-                        jd_text: jdText
+                        jd_text: jdText,
+                        company_name: companyName || null
                     })
                 });
 
-                if (!response.ok) {
-                    const err = await response.json();
-                    throw new Error(err.error || "Server error");
-                }
-
                 const data = await response.json();
-                console.log("API result:", data);
+
+                if (!response.ok) {
+                    throw new Error(data.error || "Server error");
+                }
 
                 // Fill UI
                 document.getElementById("scoreCircle").textContent = (data.match_score || 0) + "%";
@@ -282,7 +356,7 @@
                 missingContainer.innerHTML = "";
                 (data.missing_skills || []).forEach(skill => {
                     const span = document.createElement("span");
-                    span.className = "badge";
+                    span.className = "inline-flex items-center rounded-full bg-rose-50 dark:bg-rose-900/40 text-rose-700 dark:text-rose-200 px-2 py-0.5 text-[11px] font-medium border border-rose-100 dark:border-rose-800";
                     span.textContent = skill;
                     missingContainer.appendChild(span);
                 });
@@ -291,13 +365,23 @@
                 kwContainer.innerHTML = "";
                 (data.suggested_keywords || []).forEach(kw => {
                     const span = document.createElement("span");
-                    span.className = "badge";
+                    span.className = "inline-flex items-center rounded-full bg-sky-50 dark:bg-sky-900/40 text-sky-700 dark:text-sky-200 px-2 py-0.5 text-[11px] font-medium border border-sky-100 dark:border-sky-800";
                     span.textContent = kw;
                     kwContainer.appendChild(span);
                 });
 
                 document.getElementById("resumeSummary").textContent = data.resume_summary || "";
                 document.getElementById("coverLetter").textContent = data.cover_letter || "";
+
+                const improvementList = document.getElementById("improvementList");
+                improvementList.innerHTML = "";
+                (data.improvement_plan || []).forEach(step => {
+                    const li = document.createElement("li");
+                    li.textContent = step;
+                    improvementList.appendChild(li);
+                });
+
+                document.getElementById("improvedResume").textContent = data.improved_resume || "";
 
                 const qList = document.getElementById("questionsList");
                 qList.innerHTML = "";
@@ -307,7 +391,19 @@
                     qList.appendChild(li);
                 });
 
-                resultsDiv.style.display = "block";
+                const qaList = document.getElementById("qaList");
+                qaList.innerHTML = "";
+                (data.interview_qa || []).forEach(item => {
+                    const li = document.createElement("li");
+                    const q = item.question || "";
+                    const a = item.answer || "";
+                    li.innerHTML = `<strong>Q:</strong> ${q}<br/><span class="text-slate-600 dark:text-slate-300"><strong>A:</strong> ${a}</span>`;
+                    qaList.appendChild(li);
+                });
+
+                document.getElementById("companyFitNotes").textContent = data.company_fit_notes || "";
+
+                resultsSection.classList.remove("hidden");
                 statusDiv.textContent = "Analysis completed ✅";
             } catch (err) {
                 console.error(err);
