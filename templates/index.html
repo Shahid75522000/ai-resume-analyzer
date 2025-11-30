@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>AI Resume & JD Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: #ffffff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            margin-top: 30px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 13px;
+            margin-right: 6px;
+            margin-bottom: 4px;
+        }
+
+        .score-circle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 6px solid #22c55e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .col {
+            flex: 1 1 300px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background: #f3f4f6;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>AI Resume & JD Analyzer</h1>
+        <p class="subtitle">Paste your resume and job description. Get ATS score, missing skills, summary, cover letter
+            & interview questions.</p>
+
+        <label for="resume">Resume Text</label>
+        <input type="file" id="resumeFile" accept=".pdf,.docx" />
+        <small>You can upload a PDF/DOCX or paste your resume below.</small>
+        <textarea id="resume" placeholder="Paste your resume content here..."></textarea>
+
+
+        <label for="jd">Job Description</label>
+        <textarea id="jd" placeholder="Paste the job description here..."></textarea>
+
+        <button id="analyzeBtn">Analyze Resume</button>
+
+        <div id="status"></div>
+
+        <div id="results" class="results" style="display:none;">
+            <div class="row">
+                <div class="col">
+                    <h2>ATS Match Score</h2>
+                    <div class="score-circle" id="scoreCircle">0%</div>
+                </div>
+                <div class="col">
+                    <h2>Missing Skills</h2>
+                    <div id="missingSkills"></div>
+                </div>
+            </div>
+
+            <h2>Suggested Keywords</h2>
+            <div id="suggestedKeywords"></div>
+
+            <h2>
+                Resume Summary
+                <button type="button" id="copySummaryBtn" style="margin-left:10px; font-size:12px;">Copy</button>
+            </h2>
+            <pre id="resumeSummary"></pre>
+
+            <h2>
+                Cover Letter
+                <button type="button" id="copyCoverBtn" style="margin-left:10px; font-size:12px;">Copy</button>
+            </h2>
+            <pre id="coverLetter"></pre>
+
+            <h2>
+                Interview Questions
+                <button type="button" id="copyQuestionsBtn" style="margin-left:10px; font-size:12px;">Copy</button>
+            </h2>
+            <ul id="questionsList"></ul>
+
+        </div>
+    </div>
+
+    <script>
+        const analyzeBtn = document.getElementById("analyzeBtn");
+        const statusDiv = document.getElementById("status");
+        const resultsDiv = document.getElementById("results");
+
+        const resumeFileInput = document.getElementById("resumeFile");
+
+        resumeFileInput.addEventListener("change", async () => {
+            const file = resumeFileInput.files[0];
+            if (!file) return;
+
+            statusDiv.textContent = "Reading resume file...";
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            try {
+                const res = await fetch("/extract_text", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.error || "Failed to extract text");
+                }
+
+                document.getElementById("resume").value = data.text || "";
+                statusDiv.textContent = "Resume text loaded from file ✅";
+            } catch (err) {
+                console.error(err);
+                statusDiv.textContent = "Error: " + err.message;
+            }
+        });
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    statusDiv.textContent = "Copied to clipboard ✅";
+                })
+                .catch(() => {
+                    statusDiv.textContent = "Failed to copy ❌";
+                });
+        }
+
+        document.getElementById("copySummaryBtn").addEventListener("click", () => {
+            const text = document.getElementById("resumeSummary").textContent || "";
+            if (text.trim()) copyText(text);
+        });
+
+        document.getElementById("copyCoverBtn").addEventListener("click", () => {
+            const text = document.getElementById("coverLetter").textContent || "";
+            if (text.trim()) copyText(text);
+        });
+
+        document.getElementById("copyQuestionsBtn").addEventListener("click", () => {
+            const lis = Array.from(document.querySelectorAll("#questionsList li"));
+            const text = lis.map(li => "- " + li.textContent).join("\n");
+            if (text.trim()) copyText(text);
+        });
+
+
+        analyzeBtn.addEventListener("click", async () => {
+            const resumeText = document.getElementById("resume").value.trim();
+            const jdText = document.getElementById("jd").value.trim();
+
+            if (!resumeText || !jdText) {
+                alert("Please paste both resume and job description.");
+                return;
+            }
+
+            analyzeBtn.disabled = true;
+            statusDiv.textContent = "Analyzing... please wait.";
+            resultsDiv.style.display = "none";
+
+            try {
+                const response = await fetch("/analyze", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        resume_text: resumeText,
+                        jd_text: jdText
+                    })
+                });
+
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.error || "Server error");
+                }
+
+                const data = await response.json();
+                console.log("API result:", data);
+
+                // Fill UI
+                document.getElementById("scoreCircle").textContent = (data.match_score || 0) + "%";
+
+                const missingContainer = document.getElementById("missingSkills");
+                missingContainer.innerHTML = "";
+                (data.missing_skills || []).forEach(skill => {
+                    const span = document.createElement("span");
+                    span.className = "badge";
+                    span.textContent = skill;
+                    missingContainer.appendChild(span);
+                });
+
+                const kwContainer = document.getElementById("suggestedKeywords");
+                kwContainer.innerHTML = "";
+                (data.suggested_keywords || []).forEach(kw => {
+                    const span = document.createElement("span");
+                    span.className = "badge";
+                    span.textContent = kw;
+                    kwContainer.appendChild(span);
+                });
+
+                document.getElementById("resumeSummary").textContent = data.resume_summary || "";
+                document.getElementById("coverLetter").textContent = data.cover_letter || "";
+
+                const qList = document.getElementById("questionsList");
+                qList.innerHTML = "";
+                (data.interview_questions || []).forEach(q => {
+                    const li = document.createElement("li");
+                    li.textContent = q;
+                    qList.appendChild(li);
+                });
+
+                resultsDiv.style.display = "block";
+                statusDiv.textContent = "Analysis completed ✅";
+            } catch (err) {
+                console.error(err);
+                statusDiv.textContent = "Error: " + err.message;
+            } finally {
+                analyzeBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
