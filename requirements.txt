@@ -30,4 +30,5 @@ tqdm==4.67.1
 typing-inspection==0.4.2
 typing_extensions==4.15.0
 Werkzeug==3.1.4
-python-slugify==23.0.1
+python-slugify==8.0.4
+
