@@ -255,6 +255,43 @@ def sitemap():
         "Content-Type": "application/xml"
     }
 
+@app.route("/blog/category/resume-tips")
+def blog_category_resume_tips():
+    # Only posts that belong to this category
+    posts = [
+        {
+            "slug": "resume-mistakes",
+            "title": "Top 10 Resume Mistakes That Reduce Shortlisting"
+        },
+        {
+            "slug": "ats-friendly-resume",
+            "title": "How to Write an ATS-Friendly Resume (2026 Guide)"
+        },
+        {
+            "slug": "resume-summary-examples",
+            "title": "Best Resume Summary Examples (For All Experience Levels)"
+        },
+        {
+            "slug": "top-resume-skills-2026",
+            "title": "Top Skills to Add in Your Resume (2026)"
+        },
+        {
+            "slug": "resume-format-2025",
+            "title": "Best Resume Format for Freshers & Experienced"
+        },
+        {
+            "slug": "job-description-keywords-analyst-mis-bi",
+            "title": "20 Most Common JD Keywords (Analyst + MIS + BI)"
+        },
+    ]
+
+    # This template should already exist:
+    # templates/blog/category/resume-tips/index.html
+    return render_template(
+        "blog/category/resume-tips/index.html",
+        posts=posts
+    )
+
 
 # ROBOTS
 @app.route("/robots.txt")
