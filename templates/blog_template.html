@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/blog.css">
+</head>
+
+<body>
+    <div class="blog-container">
+        <a href="/blog/category/resume-tips" class="back-link">← Back</a>
+
+        <h1>{{ title }}</h1>
+        <div class="blog-content">
+            {{ content | safe }}
+        </div>
+    </div>
+</body>
+
+</html>

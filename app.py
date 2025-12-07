@@ -25,6 +25,8 @@ def home():
     return render_template("index.html")
 
 
+
+
 @app.route("/extract_text", methods=["POST"])
 def extract_text():
     """
@@ -201,6 +203,65 @@ def analyze():
     except Exception as e:
         print("Error in /analyze route:", e)
         return jsonify({"error": "Internal server error"}), 500
+
+# ---------- BLOG ROUTES ----------
+
+# BLOG HOMEPAGE
+@app.route("/blog")
+def blog_home():
+    # Example list – you may already have a better one
+    posts = [
+        {"slug": "resume-mistakes", "title": "Top 10 Resume Mistakes That Reduce Shortlisting"},
+        {"slug": "ats-friendly-resume", "title": "How to Write an ATS-Friendly Resume"},
+        {"slug": "job-description-keywords-analyst-mis-bi", "title": "20 Most Common JD Keywords (Analyst + MIS + BI)"},
+        # ...add the rest here
+    ]
+    return render_template("blog/blog_home.html", posts=posts)
+
+
+# BLOG POST BY SLUG
+@app.route("/blog/<slug>")
+def blog_post(slug):
+    try:
+        with open(f"blog_posts/{slug}.html", "r", encoding="utf-8") as f:
+            content = f.read()
+        return render_template("blog/blog_post.html", content=content)
+    except FileNotFoundError:
+        return "<h2>Blog post not found</h2>", 404
+
+
+# SITEMAP
+@app.route("/sitemap.xml")
+def sitemap():
+    blog_slugs = [
+        "ats-friendly-resume",
+        "resume-mistakes",
+        "resume-summary-examples",
+        "top-resume-skills",
+        "resume-format-2025",
+        "tell-me-about-yourself",
+        "ats-rejection-reasons",
+        "star-interview-answers",
+        "resume-vs-cv",
+        "best-resume-templates-2026",
+        "switch-mis-to-data-analyst",
+        "become-data-engineer-guide",
+        "why-resume-not-shortlisted",
+        "free-resume-tools-2026",
+        "job-description-keywords-analyst-mis-bi",
+        # add all others you created
+    ]
+    return render_template("sitemap.xml", blog_slugs=blog_slugs), 200, {
+        "Content-Type": "application/xml"
+    }
+
+
+# ROBOTS
+@app.route("/robots.txt")
+def robots():
+    return app.send_static_file("robots.txt")
+
+
 
 
 # ---------- MAIN ----------

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <!-- Homepage -->
+    <url>
+        <loc>https://ai-resume-analyzer-zffw.onrender.com/</loc>
+        <priority>1.0</priority>
+    </url>
+
+    <!-- Blog main -->
+    <url>
+        <loc>https://ai-resume-analyzer-zffw.onrender.com/blog</loc>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Category pages -->
+    <url>
+        <loc>https://ai-resume-analyzer-zffw.onrender.com/blog/category/resume-tips</loc>
+    </url>
+    <url>
+        <loc>https://ai-resume-analyzer-zffw.onrender.com/blog/category/interview-prep</loc>
+    </url>
+    <url>
+        <loc>https://ai-resume-analyzer-zffw.onrender.com/blog/category/career-growth</loc>
+    </url>
+
+    <!-- Add all 20 blog posts -->
+    {% for slug in blog_slugs %}
+    <url>
+        <loc>https://ai-resume-analyzer-zffw.onrender.com/blog/{{ slug }}</loc>
+    </url>
+    {% endfor %}
+
+</urlset>

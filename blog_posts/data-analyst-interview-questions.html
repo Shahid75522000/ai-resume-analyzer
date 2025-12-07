@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Analyst Interview Questions & Answers (2026 Edition)</title>
+    <link rel="stylesheet" href="/static/blog.css" />
+
+    <style>
+        .hero {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #fff;
+            padding: 35px 25px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .section-box {
+            background: #f8fafc;
+            padding: 20px;
+            border-left: 5px solid #2563eb;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .tip-box {
+            background: #eff6ff;
+            border-left: 5px solid #3b82f6;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .highlight {
+            background: #dbeafe;
+            padding: 4px 6px;
+            border-radius: 5px;
+        }
+
+        code {
+            background: #1e293b;
+            color: #e5e7eb;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        pre {
+            background: #0f172a;
+            color: #e5e7eb;
+            padding: 10px 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+
+        h2 {
+            color: #1e293b;
+            margin-top: 28px;
+        }
+
+        h3 {
+            color: #334155;
+            margin-top: 18px;
+        }
+
+        ul li {
+            margin: 6px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="/blog">⬅ Back to Blog</a>
+
+    <div class="hero">
+        <h1>Data Analyst Interview Questions & Best Answers (2026 Edition)</h1>
+        <p>The most frequently asked Data Analyst interview questions—explained in simple, job-ready answers.</p>
+    </div>
+
+    <div class="content">
+
+        <p>
+            Companies in 2026 are looking for Data Analysts who can work with SQL, Excel, Power BI/Tableau, and business
+            logic.
+            These questions are asked in 90% of interviews and will help you prepare quickly.
+        </p>
+
+        ---
+
+        <h2>1. What does a Data Analyst do?</h2>
+
+        <div class="section-box">
+            <p>
+                A Data Analyst collects, cleans, transforms and analyzes data to help businesses make better decisions.
+                They create dashboards, reports, insights and forecasts using tools like Excel, SQL and Power BI.
+            </p>
+        </div>
+
+        ---
+
+        <h2>2. What tools do Data Analysts use?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li>Excel (Advanced)</li>
+                <li>SQL (MySQL, PostgreSQL, SQL Server)</li>
+                <li>Power BI / Tableau</li>
+                <li>Python (Pandas)</li>
+                <li>Power Query</li>
+                <li>ETL Tools</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>3. How do you handle missing or inconsistent data?</h2>
+
+        <div class="section-box">
+            <p>Common techniques:</p>
+            <ul>
+                <li>Remove nulls</li>
+                <li>Replace nulls (0, mean, median, mode)</li>
+                <li>Forward-fill / Back-fill</li>
+                <li>Correct formats (dates, numbers)</li>
+                <li>Identify duplicates</li>
+            </ul>
+
+            <p>
+                In Power Query: <code>Replace Errors</code>, <code>Fill Down</code>, <code>Remove Rows</code>
+                In SQL: <code>COALESCE()</code>, <code>CASE</code>
+            </p>
+        </div>
+
+        ---
+
+        <h2>4. What is the difference between a KPI and a Metric?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li><strong>Metric</strong> → any measurable number (orders, revenue, calls received)</li>
+                <li><strong>KPI</strong> → a metric that measures performance against goals (conversion rate, SLA %,
+                    sales growth)</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>5. Explain ETL.</h2>
+
+        <div class="section-box">
+            <p>
+                <strong>ETL</strong> = Extract → Transform → Load
+                Used for moving data from multiple sources into a structured format.
+            </p>
+
+            <p>Example: Import Excel → Clean in Power Query → Load into Power BI.</p>
+        </div>
+
+        ---
+
+        <h2>6. What is a Star Schema?</h2>
+
+        <div class="section-box">
+            <p>
+                A data modelling structure with:
+            </p>
+            <ul>
+                <li>One Fact Table (transactions)</li>
+                <li>Multiple Dimension Tables (Date, Customer, Product)</li>
+            </ul>
+
+            <p>This improves Power BI performance & clean relationships.</p>
+        </div>
+
+        ---
+
+        <h2>7. How do you analyze trends in data?</h2>
+
+        <div class="section-box">
+            <p>Techniques include:</p>
+            <ul>
+                <li>Moving Averages</li>
+                <li>YoY, MoM growth</li>
+                <li>Seasonality</li>
+                <li>Time-series charts</li>
+                <li>Forecasting</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>8. What is correlation?</h2>
+
+        <div class="section-box">
+            <p>
+                Correlation shows the relationship between two variables (strength + direction).
+            </p>
+
+            <p>
+                +1 → strong positive
+                -1 → strong negative
+                0 → no relationship
+            </p>
+        </div>
+
+        ---
+
+        <h2>9. What is normalization?</h2>
+
+        <div class="section-box">
+            <p>
+                Normalization organizes data in the database to reduce duplication and improve consistency.
+            </p>
+
+            <p>Example: Separating customer table & orders table.</p>
+        </div>
+
+        ---
+
+        <h2>10. What does a typical Data Analyst project workflow look like?</h2>
+
+        <div class="section-box">
+            <ol>
+                <li>Understand business requirement</li>
+                <li>Collect data</li>
+                <li>Clean & transform data</li>
+                <li>Analyze & visualize</li>
+                <li>Generate insights</li>
+                <li>Communicate results</li>
+            </ol>
+        </div>
+
+        ---
+
+        <h2>11. What is the difference between Report and Dashboard?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li><strong>Report</strong> → multiple pages, detailed tables, deep dive</li>
+                <li><strong>Dashboard</strong> → one page, summary KPIs, visuals only</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>12. What is DAX?</h2>
+
+        <div class="section-box">
+            <p>
+                DAX = Data Analysis Expressions
+                Used to create dynamic calculations in Power BI.
+            </p>
+
+            <pre><code>Total Sales = SUM(Sales[Amount])</code></pre>
+        </div>
+
+        ---
+
+        <h2>13. What SQL queries do Data Analysts use most?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li>SELECT</li>
+                <li>JOIN</li>
+                <li>GROUP BY</li>
+                <li>WHERE</li>
+                <li>HAVING</li>
+                <li>WINDOW FUNCTIONS</li>
+                <li>CTEs</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>14. How do you validate data accuracy?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li>Check duplicate rows</li>
+                <li>Check missing values</li>
+                <li>Cross-verify totals</li>
+                <li>Check date formats</li>
+                <li>Compare SQL vs Power BI output</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>15. How do you explain insights to management?</h2>
+
+        <div class="section-box">
+            <p>
+                Use simple language.
+                Include recommendations.
+                Focus on business impact.
+            </p>
+
+            <strong>Example:</strong>
+            “Sales dropped 12% last month due to low stock availability in North region.”
+        </div>
+
+        ---
+
+        <h2>16. What is A/B Testing?</h2>
+
+        <div class="section-box">
+            <p>
+                A/B testing compares two versions of something to see which performs better.
+            </p>
+        </div>
+
+        ---
+
+        <h2>17. What is a Cohort Analysis?</h2>
+
+        <div class="section-box">
+            <p>
+                Cohort analysis groups customers/users based on their first interaction and tracks behavior over time.
+            </p>
+        </div>
+
+        ---
+
+        <h2>18. Explain Outliers.</h2>
+
+        <div class="section-box">
+            <p>
+                Outliers are values that are unusually high or low compared to the rest of the data.
+                Often detected using Z-score or IQR.
+            </p>
+        </div>
+
+        ---
+
+        <h2>19. What visualizations do Data Analysts commonly use?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li>Line chart</li>
+                <li>Bar/Column chart</li>
+                <li>Pie/Donut (limited use)</li>
+                <li>Heatmap</li>
+                <li>Boxplot</li>
+                <li>KPI cards</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>20. What skills should a Data Analyst have?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li>Excel (Advance)</li>
+                <li>SQL</li>
+                <li>Power BI/Tableau</li>
+                <li>Data Modeling</li>
+                <li>Data Cleaning</li>
+                <li>Communication</li>
+            </ul>
+        </div>
+
+        ---
+
+        <div class="tip-box">
+            ✔ Practice SQL
+            ✔ Build 3–4 dashboards
+            ✔ Learn DAX basics
+            ✔ Prepare storytelling skills
+            ✔ Understand business KPIs
+        </div>
+
+        <p>
+            These interview questions will help you confidently prepare for Data Analyst roles in 2026 across IT, BPO,
+            e-commerce, finance and operations industries.
+        </p>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create New AI Blog Article</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #f8fafc;
+            margin: 0;
+            padding: 40px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: white;
+            max-width: 700px;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 12px 35px rgba(15, 23, 42, 0.15);
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: 600;
+        }
+
+        input,
+        select,
+        textarea {
+            margin-top: 4px;
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #cbd5f5;
+            font-size: 14px;
+        }
+
+        button {
+            margin-top: 18px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: none;
+            background: #4f46e5;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #4338ca;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .success {
+            margin-top: 10px;
+            color: #16a34a;
+            font-size: 14px;
+        }
+
+        .error {
+            margin-top: 10px;
+            color: #dc2626;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h1>🧠 AI Blog Article Generator</h1>
+        <p class="hint">Use this only by you (admin). It will generate a full article and save it into
+            <code>blog_posts/</code>.
+        </p>
+
+        {% if message %}
+        <div class="{{ 'success' if success else 'error' }}">{{ message }}</div>
+        {% endif %}
+
+        <form method="post">
+            <label>Article Title</label>
+            <input type="text" name="title" placeholder="Example: Top 15 Excel Functions Every MIS Executive Must Know"
+                required>
+
+            <label>Category</label>
+            <select name="category">
+                <option value="resume-tips">Resume Tips</option>
+                <option value="interview-prep">Interview Prep</option>
+                <option value="career-growth">Career Growth</option>
+                <option value="data-analytics">Data Analytics</option>
+                <option value="tools">Tools (Excel / Power BI / SQL)</option>
+            </select>
+
+            <label>Target Keywords (optional)</label>
+            <input type="text" name="keywords" placeholder="excel interview questions, MIS, reporting, formulas">
+
+            <label>Short Description (optional)</label>
+            <textarea name="description" rows="3"
+                placeholder="One line about what this article should focus on..."></textarea>
+
+            <button type="submit">Generate Article ⚡</button>
+        </form>
+    </div>
+
+</body>
+
+</html>

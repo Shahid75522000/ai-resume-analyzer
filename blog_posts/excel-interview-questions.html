@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Excel Interview Questions & Answers (2026 Edition)</title>
+    <link rel="stylesheet" href="/static/blog.css" />
+
+    <style>
+        .hero {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #fff;
+            padding: 35px 25px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .section-box {
+            background: #f8fafc;
+            padding: 20px;
+            border-left: 5px solid #d97706;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .tip-box {
+            background: #fef3c7;
+            border-left: 5px solid #f59e0b;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .highlight {
+            background: #fff7ed;
+            padding: 4px 6px;
+            border-radius: 5px;
+        }
+
+        code {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        pre {
+            background: #111827;
+            color: #e5e7eb;
+            padding: 10px 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+
+        h2 {
+            color: #1e293b;
+            margin-top: 28px;
+        }
+
+        h3 {
+            color: #334155;
+            margin-top: 18px;
+        }
+
+        ul li {
+            margin: 6px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="/blog">⬅ Back to Blog</a>
+
+    <div class="hero">
+        <h1>Excel Interview Questions & Answers (2026 Edition)</h1>
+        <p>The most commonly asked Excel questions for MIS, Reporting, Analyst and Operations interviews.</p>
+    </div>
+
+    <div class="content">
+
+        <p>
+            Excel is still one of the most in-demand skills in 2026 for reporting, operations, MIS, and analyst jobs.
+            These questions will help you prepare for real interviews quickly and confidently.
+        </p>
+
+        ---
+
+        <h2>1. What is the difference between VLOOKUP and XLOOKUP?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li><strong>VLOOKUP</strong> → Searches only to the right.</li>
+                <li><strong>XLOOKUP</strong> → Searches left & right, supports exact match, and is more flexible.</li>
+            </ul>
+
+            <strong>Example:</strong>
+            <pre><code>=XLOOKUP(A2, B2:B100, C2:C100)</code></pre>
+        </div>
+
+        ---
+
+        <h2>2. What does IFERROR do?</h2>
+
+        <div class="section-box">
+            <p>
+                IFERROR returns an alternative value when a formula produces an error.
+            </p>
+
+            <pre><code>=IFERROR(VLOOKUP(A2, D:E, 2, FALSE), "Not Found")</code></pre>
+        </div>
+
+        ---
+
+        <h2>3. What is the difference between COUNT, COUNTA, COUNTBLANK & COUNTIF?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li><strong>COUNT</strong> → Counts numbers</li>
+                <li><strong>COUNTA</strong> → Counts non-blank cells</li>
+                <li><strong>COUNTBLANK</strong> → Counts empty cells</li>
+                <li><strong>COUNTIF</strong> → Counts cells based on condition</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>4. What is a Pivot Table?</h2>
+
+        <div class="section-box">
+            <p>A Pivot Table summarizes large data using drag-and-drop fields.</p>
+
+            <strong>Common use cases:</strong>
+            <ul>
+                <li>Sales by month</li>
+                <li>Calls by agent</li>
+                <li>Inventory by category</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>5. What are Absolute & Relative cell references?</h2>
+
+        <div class="section-box">
+            <p>
+                <strong>Absolute reference:</strong> <code>$A$1</code> (does not change when copied)<br>
+                <strong>Relative reference:</strong> <code>A1</code> (changes when copied)
+            </p>
+        </div>
+
+        ---
+
+        <h2>6. What is Conditional Formatting?</h2>
+
+        <div class="section-box">
+            <p>
+                Conditional formatting highlights cells based on rules (e.g., values > 1000, duplicates, top 10%).
+            </p>
+        </div>
+
+        ---
+
+        <h2>7. What is the difference between CONCATENATE and TEXTJOIN?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li><strong>CONCATENATE</strong> → Joins text but is limited</li>
+                <li><strong>TEXTJOIN</strong> → Joins text with a delimiter, can ignore blank cells</li>
+            </ul>
+
+            <pre><code>=TEXTJOIN(", ", TRUE, A2:A10)</code></pre>
+        </div>
+
+        ---
+
+        <h2>8. What is Power Query?</h2>
+
+        <div class="section-box">
+            <p>
+                Power Query is used for data cleaning and automation:
+            </p>
+
+            <ul>
+                <li>Remove duplicates</li>
+                <li>Split columns</li>
+                <li>Merge tables</li>
+                <li>Change data types</li>
+            </ul>
+
+            <strong>M Language Example:</strong>
+            <pre><code>= Table.RemoveDuplicates(#"Changed Type", {"ID"})</code></pre>
+        </div>
+
+        ---
+
+        <h2>9. What is the difference between Remove Duplicates vs UNIQUE()?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li><strong>Remove Duplicates</strong> → One-time action</li>
+                <li><strong>UNIQUE()</strong> → Dynamic formula that updates automatically</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>10. What does FILTER() do?</h2>
+
+        <div class="section-box">
+            <p>
+                FILTER returns only the rows that match the condition.
+            </p>
+
+            <pre><code>=FILTER(A2:C100, C2:C100="Completed")</code></pre>
+        </div>
+
+        ---
+
+        <h2>11. What are common Excel keyboard shortcuts?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li><strong>Ctrl + Shift + L</strong> → Add Filter</li>
+                <li><strong>Ctrl + T</strong> → Convert to Table</li>
+                <li><strong>Ctrl + Arrow Keys</strong> → Move across data</li>
+                <li><strong>Ctrl + Shift + Down/Right</strong> → Select data</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>12. How do you clean data in Excel?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li>TRIM</li>
+                <li>CLEAN</li>
+                <li>Find & Replace</li>
+                <li>Remove Duplicates</li>
+                <li>Text-to-columns</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>13. What is Data Validation?</h2>
+
+        <div class="section-box">
+            <p>Used to restrict inputs (e.g., dropdown lists, number ranges).</p>
+        </div>
+
+        ---
+
+        <h2>14. How do you protect a sheet or workbook?</h2>
+
+        <div class="section-box">
+            <p>
+                Use Review → Protect Sheet / Protect Workbook.
+                Often used in MIS reporting.
+            </p>
+        </div>
+
+        ---
+
+        <h2>15. How do you find unique values?</h2>
+
+        <div class="section-box">
+            <p>
+                Use <code>UNIQUE()</code> or Pivot Table → Rows.
+            </p>
+        </div>
+
+        ---
+
+        <h2>16. What is Excel Table and why use it?</h2>
+
+        <div class="section-box">
+            <p>
+                Excel Table helps with structured references and automatic range updates.
+            </p>
+
+            <strong>Example:</strong>
+            <pre><code>=SUM(Table1[Sales])</code></pre>
+        </div>
+
+        ---
+
+        <h2>17. Explain XLOOKUP with multiple conditions.</h2>
+
+        <div class="section-box">
+            <p>
+                Use TEXTJOIN inside XLOOKUP:
+            </p>
+
+            <pre><code>=XLOOKUP(A2&B2, D:D&E:E, F:F)</code></pre>
+        </div>
+
+        ---
+
+        <h2>18. How do you remove spaces in Excel?</h2>
+
+        <div class="section-box">
+            <p><code>=TRIM(A2)</code></p>
+        </div>
+
+        ---
+
+        <h2>19. How do you calculate percentage?</h2>
+
+        <div class="section-box">
+            <p><code>=Actual / Target</code> then format as %</p>
+        </div>
+
+        ---
+
+        <h2>20. How to combine first and last name?</h2>
+
+        <div class="section-box">
+            <pre><code>=A2 & " " & B2</code></pre>
+        </div>
+
+        <div class="tip-box">
+            ✔ Practice these Excel topics: formulas, tables, Pivot Tables, Power Query, conditional formatting
+            ✔ Most MIS and Analyst interviews ask 8–10 questions from the list above
+        </div>
+
+        <p>
+            Mastering these Excel questions will prepare you for MIS Executive, Data Analyst, Reporting Analyst,
+            Operations Analyst and other data-related roles.
+        </p>
+
+    </div>
+
+</body>
+
+</html>

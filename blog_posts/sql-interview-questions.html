@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Most Asked SQL Interview Questions (With Answers)</title>
+    <link rel="stylesheet" href="/static/blog.css" />
+
+    <style>
+        .hero {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #fff;
+            padding: 35px 25px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .section-box {
+            background: #f8fafc;
+            padding: 20px;
+            border-left: 5px solid #16a34a;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .tip-box {
+            background: #ecfdf5;
+            border-left: 5px solid #10b981;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .highlight {
+            background: #dcfce7;
+            padding: 4px 6px;
+            border-radius: 5px;
+        }
+
+        code {
+            background: #0f172a;
+            color: #e5e7eb;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: #020617;
+            color: #e5e7eb;
+            padding: 10px 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+
+        h2 {
+            color: #1e293b;
+            margin-top: 28px;
+        }
+
+        h3 {
+            color: #334155;
+            margin-top: 18px;
+        }
+
+        ul li {
+            margin: 6px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="/blog">⬅ Back to Blog</a>
+
+    <div class="hero">
+        <h1>Most Asked SQL Interview Questions (With Answers)</h1>
+        <p>Prepare for Data Analyst, MIS, BI and Reporting interviews with these essential SQL questions and clear
+            explanations.</p>
+    </div>
+
+    <div class="content">
+
+        <p>
+            SQL is one of the most important skills for Data Analysts, MIS Executives and BI Developers.
+            Below are the <strong>most frequently asked SQL interview questions</strong>, with short, clear answers you
+            can revise quickly.
+        </p>
+
+        <!-- Q1 -->
+        <h2>1. What is the difference between INNER JOIN and LEFT JOIN?</h2>
+
+        <div class="section-box">
+            <p><strong>INNER JOIN:</strong> returns only matching rows from both tables.</p>
+            <p><strong>LEFT JOIN:</strong> returns all rows from left table + matching rows from right; if no match,
+                right side is <code>NULL</code>.</p>
+
+            <pre><code>SELECT c.customer_name, o.order_id
+FROM Customers c
+INNER JOIN Orders o
+    ON c.customer_id = o.customer_id;</code></pre>
+
+            <pre><code>SELECT c.customer_name, o.order_id
+FROM Customers c
+LEFT JOIN Orders o
+    ON c.customer_id = o.customer_id;</code></pre>
+        </div>
+
+        <!-- Q2 -->
+        <h2>2. What is the difference between WHERE and HAVING?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li><strong>WHERE</strong> filters rows before grouping/aggregation.</li>
+                <li><strong>HAVING</strong> filters groups after aggregation (used with GROUP BY).</li>
+            </ul>
+
+            <pre><code>SELECT department, COUNT(*) AS emp_count
+FROM Employees
+WHERE status = 'Active'
+GROUP BY department
+HAVING COUNT(*) &gt; 5;</code></pre>
+        </div>
+
+        <!-- Q3 -->
+        <h2>3. How do you find duplicate records in a table?</h2>
+
+        <div class="section-box">
+            <p>Use GROUP BY and HAVING:</p>
+
+            <pre><code>SELECT email, COUNT(*) AS cnt
+FROM Users
+GROUP BY email
+HAVING COUNT(*) &gt; 1;</code></pre>
+        </div>
+
+        <!-- Q4 -->
+        <h2>4. Write a query to get the second highest salary.</h2>
+
+        <div class="section-box">
+            <p>One common method:</p>
+
+            <pre><code>SELECT MAX(salary) AS second_highest_salary
+FROM Employees
+WHERE salary &lt; (SELECT MAX(salary) FROM Employees);</code></pre>
+
+            <p>Using <strong>ROW_NUMBER</strong> / <strong>DENSE_RANK</strong> (if supported):</p>
+
+            <pre><code>WITH cte AS (
+    SELECT salary,
+           DENSE_RANK() OVER (ORDER BY salary DESC) AS rn
+    FROM Employees
+)
+SELECT salary
+FROM cte
+WHERE rn = 2;</code></pre>
+        </div>
+
+        <!-- Q5 -->
+        <h2>5. What is a PRIMARY KEY and FOREIGN KEY?</h2>
+
+        <div class="section-box">
+            <p>
+                <strong>Primary Key:</strong> Uniquely identifies each row in a table. No duplicates, no NULLs.
+                <strong>Foreign Key:</strong> A column that refers to the primary key of another table to maintain
+                relationship.
+            </p>
+        </div>
+
+        <!-- Q6 -->
+        <h2>6. What is the difference between DELETE, TRUNCATE and DROP?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li><strong>DELETE</strong> – removes rows one by one (can use WHERE), can be rolled back.</li>
+                <li><strong>TRUNCATE</strong> – removes all rows quickly, cannot use WHERE, usually not logged
+                    row-by-row.</li>
+                <li><strong>DROP</strong> – removes the entire table structure + data.</li>
+            </ul>
+        </div>
+
+        <!-- Q7 -->
+        <h2>7. What are aggregate functions in SQL?</h2>
+
+        <div class="section-box">
+            <p>Aggregate functions operate on a set of values and return a single value.</p>
+            <ul>
+                <li><code>COUNT()</code></li>
+                <li><code>SUM()</code></li>
+                <li><code>AVG()</code></li>
+                <li><code>MIN()</code></li>
+                <li><code>MAX()</code></li>
+            </ul>
+        </div>
+
+        <!-- Q8 -->
+        <h2>8. Explain GROUP BY with an example.</h2>
+
+        <div class="section-box">
+            <p>GROUP BY groups rows that have the same values into summary rows.</p>
+
+            <pre><code>SELECT department, COUNT(*) AS emp_count
+FROM Employees
+GROUP BY department;</code></pre>
+        </div>
+
+        <!-- Q9 -->
+        <h2>9. What is a subquery? Give an example.</h2>
+
+        <div class="section-box">
+            <p>A <strong>subquery</strong> is a query inside another query.</p>
+
+            <pre><code>SELECT name, salary
+FROM Employees
+WHERE salary &gt; (
+    SELECT AVG(salary)
+    FROM Employees
+);</code></pre>
+        </div>
+
+        <!-- Q10 -->
+        <h2>10. What are window functions?</h2>
+
+        <div class="section-box">
+            <p>
+                Window functions perform calculations across a set of table rows that are related to the current row.
+                Common examples: <code>ROW_NUMBER()</code>, <code>RANK()</code>, <code>DENSE_RANK()</code>,
+                <code>LAG()</code>, <code>LEAD()</code>.
+            </p>
+
+            <pre><code>SELECT employee_id,
+       salary,
+       RANK() OVER (ORDER BY salary DESC) AS salary_rank
+FROM Employees;</code></pre>
+        </div>
+
+        <!-- Q11 -->
+        <h2>11. How do you find employees who do not have any orders?</h2>
+
+        <div class="section-box">
+            <p>Use LEFT JOIN with NULL check:</p>
+
+            <pre><code>SELECT e.employee_id, e.name
+FROM Employees e
+LEFT JOIN Orders o
+    ON e.employee_id = o.employee_id
+WHERE o.employee_id IS NULL;</code></pre>
+        </div>
+
+        <!-- Q12 -->
+        <h2>12. What is the difference between UNION and UNION ALL?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li><strong>UNION</strong> → combines result sets and removes duplicates.</li>
+                <li><strong>UNION ALL</strong> → combines result sets and keeps duplicates.</li>
+            </ul>
+        </div>
+
+        <!-- Q13 -->
+        <h2>13. How do you get top N rows per group?</h2>
+
+        <div class="section-box">
+            <p>Using window functions:</p>
+
+            <pre><code>WITH ranked AS (
+    SELECT
+        customer_id,
+        order_id,
+        order_amount,
+        ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_amount DESC) AS rn
+    FROM Orders
+)
+SELECT *
+FROM ranked
+WHERE rn = 1;  -- top order per customer</code></pre>
+        </div>
+
+        <!-- Q14 -->
+        <h2>14. How to find total sales per month?</h2>
+
+        <div class="section-box">
+            <pre><code>SELECT
+    DATE_TRUNC('month', order_date) AS month,
+    SUM(order_amount) AS total_sales
+FROM Orders
+GROUP BY DATE_TRUNC('month', order_date)
+ORDER BY month;</code></pre>
+            <p>(Function name may differ by database: <code>DATE_TRUNC</code>, <code>FORMAT</code>,
+                <code>TO_CHAR</code>, etc.)
+            </p>
+        </div>
+
+        <!-- Q15 -->
+        <h2>15. How do you handle NULL values in SQL?</h2>
+
+        <div class="section-box">
+            <p>Use <code>COALESCE</code> or functions like <code>ISNULL()</code> / <code>IFNULL()</code> depending on
+                DB.</p>
+
+            <pre><code>SELECT COALESCE(phone_number, 'Not Provided') AS phone
+FROM Customers;</code></pre>
+        </div>
+
+        <div class="tip-box">
+            ✔ When preparing, type queries in a real SQL editor (MySQL, PostgreSQL, SQL Server, etc.)
+            ✔ Focus on <span class="highlight">SELECT, JOIN, GROUP BY, HAVING, WHERE, subqueries, window
+                functions</span>.
+        </div>
+
+        <p>
+            These SQL questions are enough to clear most Data Analyst, MIS, BI, and Reporting interviews at the beginner
+            to intermediate level.
+            Practice writing the queries yourself and try using sample datasets.
+        </p>
+
+    </div>
+
+</body>
+
+</html>

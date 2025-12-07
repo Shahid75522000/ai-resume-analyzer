@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Power BI Interview Questions & Best Answers (2026 Edition)</title>
+    <link rel="stylesheet" href="/static/blog.css" />
+
+    <style>
+        .hero {
+            background: linear-gradient(135deg, #4338ca, #4f46e5);
+            color: #fff;
+            padding: 35px 25px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .section-box {
+            background: #f8fafc;
+            padding: 20px;
+            border-left: 5px solid #4f46e5;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .tip-box {
+            background: #eef2ff;
+            border-left: 5px solid #6366f1;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .highlight {
+            background: #e0e7ff;
+            padding: 4px 6px;
+            border-radius: 5px;
+        }
+
+        code {
+            background: #1e293b;
+            color: #e5e7eb;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        pre {
+            background: #020617;
+            color: #e5e7eb;
+            padding: 10px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+
+        h2 {
+            color: #1e293b;
+            margin-top: 28px;
+        }
+
+        h3 {
+            color: #334155;
+            margin-top: 18px;
+        }
+
+        ul li {
+            margin: 6px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="/blog">⬅ Back to Blog</a>
+
+    <div class="hero">
+        <h1>Power BI Interview Questions & Best Answers (2026 Edition)</h1>
+        <p>These are the most important Power BI interview questions for Data Analyst, MIS & BI Developer roles in 2026.
+        </p>
+    </div>
+
+    <div class="content">
+
+        <p>
+            Power BI interviews in 2025–26 focus strongly on <strong>data modelling, DAX, Power Query</strong> and
+            real-use business scenarios.
+            Below are the most commonly asked Power BI interview questions with practical, job-ready answers.
+        </p>
+
+        ---
+
+        <h2>1. What are the main components of Power BI?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li><strong>Power BI Desktop</strong> – used to build reports & data models</li>
+                <li><strong>Power BI Service</strong> – cloud platform for publishing & sharing</li>
+                <li><strong>Power Query</strong> – data cleaning & transformation</li>
+                <li><strong>DAX</strong> – formula language for calculations</li>
+                <li><strong>Power BI Mobile</strong></li>
+                <li><strong>Power BI Gateway</strong> – refresh on-premise data</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>2. What is DAX? Explain with examples.</h2>
+
+        <div class="section-box">
+            <p>DAX = Data Analysis Expressions. It is used to create calculated columns, measures and tables.</p>
+
+            <strong>Examples:</strong>
+
+            <pre><code>Total Sales = SUM(Sales[Amount])</code></pre>
+
+            <pre><code>YoY Growth = 
+DIVIDE([Total Sales] - [Last Year Sales], [Last Year Sales])</code></pre>
+        </div>
+
+        ---
+
+        <h2>3. What is the difference between Calculated Column and Measure?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li><strong>Calculated Column</strong>:
+                    Computed row-by-row and stored in the model.
+                    Used for grouping, filtering, relationships.</li>
+
+                <li><strong>Measure</strong>:
+                    Calculated at query time (dynamic).
+                    Used for aggregations in visuals.</li>
+            </ul>
+        </div>
+
+        <div class="tip-box">
+            ⭐ Always say: “Measures are preferred for performance because they don’t increase data size.”
+        </div>
+
+        ---
+
+        <h2>4. What is star schema and why is it important?</h2>
+
+        <div class="section-box">
+            <p>A <strong>star schema</strong> consists of:</p>
+            <ul>
+                <li><strong>Fact tables</strong> (transactions, numeric values)</li>
+                <li><strong>Dimension tables</strong> (Date, Customer, Product, Region)</li>
+            </ul>
+
+            <p>It improves:</p>
+            <ul>
+                <li>Performance</li>
+                <li>Accuracy of relationships</li>
+                <li>DAX calculations</li>
+                <li>Model maintenance</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>5. How do you optimize performance in Power BI?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li>Use star schema</li>
+                <li>Reduce cardinality</li>
+                <li>Avoid too many calculated columns</li>
+                <li>Use SUMX / FILTER carefully</li>
+                <li>Keep model size small</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>6. What is the difference between DirectQuery and Import mode?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li><strong>Import Mode:</strong> Data is imported into Power BI → fast performance.</li>
+                <li><strong>DirectQuery:</strong> Data stays in database → real-time queries.</li>
+            </ul>
+        </div>
+
+        <div class="tip-box">
+            ⭐ For large datasets use DirectQuery; for dashboards use Import mode.
+        </div>
+
+        ---
+
+        <h2>7. What is Power Query and why is it used?</h2>
+
+        <div class="section-box">
+            <p>
+                Power Query is used for <strong>data cleaning, transformation and preparation</strong>.
+                It uses the M language and performs operations like:
+            </p>
+
+            <ul>
+                <li>Remove duplicates</li>
+                <li>Merge queries</li>
+                <li>Append data</li>
+                <li>Replace values</li>
+                <li>Change data types</li>
+                <li>Create custom columns</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>8. How do you create relationships in Power BI?</h2>
+
+        <div class="section-box">
+            <p>
+                Relationships are created using a common key between tables.
+                Types:
+            </p>
+            <ul>
+                <li>One-to-many (most common)</li>
+                <li>One-to-one</li>
+                <li>Many-to-many</li>
+            </ul>
+
+            <p>
+                Use the <strong>Model View</strong> to connect tables.
+            </p>
+        </div>
+
+        ---
+
+        <h2>9. What is USERELATIONSHIP?</h2>
+
+        <div class="section-box">
+            <p><strong>USERELATIONSHIP()</strong> activates an inactive relationship in DAX.</p>
+
+            <pre><code>Total Sales Using Order Date =
+CALCULATE([Total Sales], USERELATIONSHIP('Sales'[Order Date], 'Calendar'[Date]))</code></pre>
+
+            <div class="tip-box">
+                ⭐ Helpful when a fact table has 2 date fields (e.g., Order Date vs Ship Date).
+            </div>
+        </div>
+
+        ---
+
+        <h2>10. How do you handle date tables in Power BI?</h2>
+
+        <div class="section-box">
+            <p>
+                Create a dedicated <strong>Date Dimension</strong> using:
+            </p>
+
+            <pre><code>CALENDAR (DATE(2018,1,1), DATE(2026,12,31))</code></pre>
+
+            <p>Mark it as “Date Table” → Required for time intelligence functions like:</p>
+
+            <ul>
+                <li>YTD</li>
+                <li>MTD</li>
+                <li>YoY%</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>11. What is Row-Level Security (RLS)?</h2>
+
+        <div class="section-box">
+            <p>
+                RLS restricts data for specific users or groups.
+                For example, Region Manager sees only his region’s data.
+            </p>
+        </div>
+
+        ---
+
+        <h2>12. How do you schedule refresh in Power BI?</h2>
+
+        <div class="section-box">
+            <p>Steps:</p>
+            <ul>
+                <li>Publish report to Power BI Service</li>
+                <li>Go to Datasets → Settings</li>
+                <li>Add Gateway (if needed)</li>
+                <li>Configure schedule (daily/hourly)</li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>13. What are common DAX functions asked in interviews?</h2>
+
+        <div class="section-box">
+            <ul>
+                <li><code>CALCULATE()</code></li>
+                <li><code>FILTER()</code></li>
+                <li><code>SUMX()</code></li>
+                <li><code>VALUES()</code></li>
+                <li><code>EARLIER()</code></li>
+                <li><code>DATESYTD()</code></li>
+                <li><code>ALL()</code></li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>14. How do you handle missing / blank data in Power BI?</h2>
+
+        <div class="section-box">
+            <p>Use:</p>
+
+            <ul>
+                <li>Power Query → Replace Errors</li>
+                <li>Power Query → Fill Down / Up</li>
+                <li>DAX → <code>COALESCE()</code>, <code>IFBLANK()</code></li>
+            </ul>
+        </div>
+
+        ---
+
+        <h2>15. How do you publish and share Power BI reports?</h2>
+
+        <div class="section-box">
+            <p>
+                Publish from Power BI Desktop → to Power BI Service → share via link / workspace.
+                Requires Power BI Pro for sharing.
+            </p>
+        </div>
+
+        ---
+
+        <div class="tip-box">
+            ✔ Practice building a Star Schema
+            ✔ Learn important DAX
+            ✔ Build at least 3–4 dashboards for your resume
+            ✔ Know the difference between Import & DirectQuery
+            ✔ Understand Power Query steps
+        </div>
+
+        <p>
+            These questions cover 80% of what companies ask in Data Analyst, BI, MIS and Reporting interviews.
+            Master them and you’ll feel confident in any Power BI interview.
+        </p>
+
+    </div>
+</body>
+
+</html>
