@@ -276,7 +276,7 @@ def blog_category_resume_tips():
             "title": "Top Skills to Add in Your Resume (2026)"
         },
         {
-            "slug": "resume-format-2025",
+            "slug": "resume-format-guide",
             "title": "Best Resume Format for Freshers & Experienced"
         },
         {
