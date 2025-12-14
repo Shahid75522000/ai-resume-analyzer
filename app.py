@@ -25,6 +25,10 @@ def home():
     return render_template("index.html")
 
 
+@app.route("/sitemap.xml")
+def sitemap():
+    return send_from_directory("static", "sitemap.xml", mimetype="application/xml")
+
 
 
 @app.route("/extract_text", methods=["POST"])
@@ -300,6 +304,11 @@ def robots():
 
 
 
+@app.route("/subscribe", methods=["POST"])
+def subscribe():
+    email = request.form.get("email")
+    print("New subscriber:", email)
+    return redirect("/")
 
 # ---------- MAIN ----------
 
