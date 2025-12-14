@@ -19,6 +19,15 @@
             },
         };
     </script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MDC7H27N3E"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-MDC7H27N3E');
+    </script>
+
 </head>
 
 <body class="h-full bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300">
@@ -198,6 +207,28 @@
                     </div>
                 </section>
 
+                <section class="email-cta">
+                    <h2>Get Free ATS Resume Tips</h2>
+                    <p>
+                        Receive practical resume tips, ATS updates, and interview guidance.
+                        No spam. Unsubscribe anytime.
+                    </p>
+
+                    <form action="/subscribe" method="POST" class="email-form">
+                        <input type="email" name="email" placeholder="Enter your email address" required />
+                        <button type="submit">Get Free Tips</button>
+                    </form>
+                </section>
+                <!-- EMAIL CTA END -->
+                <div class="helper-box">
+                    <p>
+                        Upload your resume and paste the job description to get an
+                        <strong>ATS-style match score</strong>, missing skills, and
+                        improvement suggestions.
+                    </p>
+                    <small>✔ Your resume is processed securely and not stored.</small>
+                </div>
+
                 <!-- Inputs + Results -->
                 <section class="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
 
@@ -349,6 +380,7 @@
                             <ul id="qaList" class="list-disc list-inside text-xs md:text-sm space-y-2 mt-2"></ul>
                         </section>
 
+
                         <!-- Company Fit -->
                         <section class="space-y-1">
                             <h3 class="text-sm font-semibold">Company-Specific Optimization Tips</h3>
@@ -416,6 +448,8 @@
         const resetBtn = document.getElementById("resetBtn");
         const resultsSection = document.getElementById("resultsSection");
 
+
+
         // FILE UPLOAD -> /extract_text
         document.getElementById("resumeFile").addEventListener("change", async () => {
             const file = document.getElementById("resumeFile").files[0];
@@ -445,6 +479,7 @@
             }
         });
 
+
         // RESET BUTTON
         resetBtn.addEventListener("click", () => {
             document.getElementById("resumeFile").value = "";
@@ -455,6 +490,46 @@
             statusDiv.textContent = "";
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
+        document.getElementById("resumeFile").addEventListener("change", async function () {
+            const file = this.files[0];
+            const resumeError = document.getElementById("resumeError");
+
+            resumeError.textContent = "";
+
+            if (!file) return;
+
+            const allowedTypes = [
+                "application/pdf",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+                resumeError.textContent = "Only PDF or DOCX files are allowed.";
+                this.value = "";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("resume", file);
+
+            try {
+                const response = await fetch("/extract-resume-text", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.text) {
+                    document.getElementById("resumeText").value = data.text;
+                } else {
+                    resumeError.textContent = "Could not extract resume text.";
+                }
+            } catch (err) {
+                resumeError.textContent = "Error reading resume file.";
+            }
+        });
+
 
         // ANALYZE BUTTON
         analyzeBtn.addEventListener("click", async () => {
