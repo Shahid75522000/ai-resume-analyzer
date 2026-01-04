@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Dashboard – ResumeMatch AI</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+            background: #f9fafb;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f1f5f9;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>📊 Admin Dashboard</h1>
+
+    <div class="card">
+        <strong>Total Events:</strong> {{ total_events }}<br>
+        <strong>Total Leads:</strong> {{ total_leads }}
+    </div>
+
+    <div class="card">
+        <h3>📈 Analytics Events</h3>
+        <table>
+            <tr>
+                <th>Raw Event</th>
+            </tr>
+            {% for row in analytics %}
+            <tr>
+                <td>{{ row }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="card">
+        <h3>📊 Daily Resume Analysis</h3>
+
+        {% if daily_resumes %}
+        {% for date, count in daily_resumes.items() %}
+        <div style="margin-bottom:6px;">
+            <strong>{{ date }}</strong>
+            <div style="
+                    display:inline-block;
+                    background:#4f46e5;
+                    height:16px;
+                    width: {{ count * 20 }}px;
+                    margin-left:10px;
+                "></div>
+            <span> {{ count }}</span>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>No analytics data yet.</p>
+        {% endif %}
+    </div>
+
+
+    <div class="card">
+        <h3>📧 Email Leads</h3>
+        <table>
+            <tr>
+                <th>Email</th>
+            </tr>
+            {% for email in leads %}
+            <tr>
+                <td>{{ email }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</body>
+
+</html>

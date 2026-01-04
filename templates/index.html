@@ -21,6 +21,8 @@
     </script>
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MDC7H27N3E"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
@@ -28,10 +30,182 @@
         gtag('config', 'G-MDC7H27N3E');
     </script>
 
+
+    <style>
+        .nav-btn {
+            width: 100%;
+            text-align: left;
+            padding: 8px 12px;
+            font-size: 13px;
+            border-radius: 12px;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: #f1f5f9;
+            transform: translateX(4px);
+        }
+
+        .dark .nav-btn {
+            color: #e5e7eb;
+        }
+
+        .dark .nav-btn:hover {
+            background: #1e293b;
+        }
+    </style>
+    <style>
+        .result-card {
+            opacity: 0;
+            transform: translateY(12px);
+            animation: reveal 0.5s ease forwards;
+        }
+
+        @keyframes reveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    <style>
+        /* ATS-style left navigation */
+        .nav-btn {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: left;
+            border-radius: 14px;
+            color: #334155;
+            transition: all 0.25s ease;
+        }
+
+        .nav-btn:hover {
+            background: linear-gradient(to right, #eef2ff, #f8fafc);
+            transform: translateX(6px);
+        }
+
+        .dark .nav-btn {
+            color: #e5e7eb;
+        }
+
+        .dark .nav-btn:hover {
+            background: #1e293b;
+        }
+    </style>
+
+    <style>
+        /* Result reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: all 0.45s ease;
+        }
+
+        .reveal.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+
+    <style>
+        .reveal-section {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: all 0.45s ease;
+        }
+
+        .reveal-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+    <style>
+        .micro-hint {
+            font-size: 11px;
+            color: rgb(100 116 139);
+            /* slate-500 */
+            margin-top: 2px;
+        }
+
+        .dark .micro-hint {
+            color: rgb(148 163 184);
+            /* slate-400 */
+        }
+    </style>
+    <style>
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tip);
+            position: absolute;
+            left: 50%;
+            bottom: 120%;
+            transform: translateX(-50%);
+            background: #111827;
+            color: #f9fafb;
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 50;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-2px);
+        }
+    </style>
+    <style>
+        .toggle-btn {
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid #c7d2fe;
+            background: #eef2ff;
+            color: #3730a3;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .toggle-btn.active {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .toggle-btn:not(.active):hover {
+            background: #e0e7ff;
+        }
+    </style>
+    <style>
+        .reveal-section {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: all 0.45s ease;
+        }
+
+        .reveal-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+
+
 </head>
 
 <body class="h-full bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300">
     <div class="min-h-screen flex flex-col">
+
+
+
 
         <!-- Top Bar -->
         <header
@@ -49,6 +223,8 @@
                         </p>
                     </div>
                 </div>
+
+
 
                 <!-- Theme toggle -->
                 <button id="themeToggle"
@@ -207,6 +383,7 @@
                     </div>
                 </section>
 
+                <!-- EMAIL CTA START -->
                 <section class="email-cta">
                     <h2>Get Free ATS Resume Tips</h2>
                     <p>
@@ -214,11 +391,15 @@
                         No spam. Unsubscribe anytime.
                     </p>
 
-                    <form action="/subscribe" method="POST" class="email-form">
-                        <input type="email" name="email" placeholder="Enter your email address" required />
+                    <form id="emailForm">
+                        <input type="email" id="emailInput" placeholder="Enter your email address" required />
                         <button type="submit">Get Free Tips</button>
                     </form>
+
+                    <p id="emailStatus" class="text-sm"></p>
                 </section>
+
+
                 <!-- EMAIL CTA END -->
                 <div class="helper-box">
                     <p>
@@ -226,11 +407,18 @@
                         <strong>ATS-style match score</strong>, missing skills, and
                         improvement suggestions.
                     </p>
-                    <small>✔ Your resume is processed securely and not stored.</small>
+                    <div class="mt-2 rounded-xl bg-slate-50 dark:bg-slate-800/60
+            border border-slate-200 dark:border-slate-700
+            px-3 py-2 text-[11px] text-slate-600 dark:text-slate-300">
+                        🔒 <strong>Privacy-first analysis:</strong><br>
+                        • Your resume is processed securely in-memory<br>
+                        • No resumes are stored or shared<br>
+                        • Data is deleted after analysis
+                    </div>
                 </div>
 
                 <!-- Inputs + Results -->
-                <section class="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+                <section class="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-6 items-start">
 
                     <!-- LEFT: Inputs -->
                     <div
@@ -291,9 +479,38 @@
 
                         <!-- Status -->
                         <p id="status" class="text-[11px] text-slate-500 dark:text-slate-400 min-h-[16px]"></p>
+                        <!-- 🔄 Analysis Progress -->
+                        <div id="progressWrapper" class="hidden mt-2 space-y-1">
+                            <div class="flex justify-between text-[11px] text-slate-500">
+                                <span id="progressLabel">Analyzing resume...</span>
+                                <span id="progressPercent">0%</span>
+                            </div>
+
+                            <div class="h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+                                <div id="progressBar"
+                                    class="h-2 bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-400 transition-all duration-500"
+                                    style="width: 0%">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p id="creditInfo" class="text-[11px] text-indigo-600 dark:text-indigo-400 mt-1"></p>
+
+                        <button id="buyCreditsBtn" class="hidden mt-2 inline-flex items-center gap-2 rounded-xl
+         border border-indigo-600 text-indigo-600
+         px-3 py-1.5 text-xs font-semibold
+         hover:bg-indigo-50 dark:hover:bg-slate-800">
+                            💳 Buy Credits
+                        </button>
 
                         <!-- Buttons -->
                         <div class="flex flex-wrap gap-2">
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                                🤖 Analysis powered by AI trained on recruiter & ATS patterns —
+                                <span class="font-medium">No Human review, fully automated</span>
+                            </p>
+
                             <button id="analyzeBtn"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 shadow-sm transition disabled:bg-slate-400 disabled:cursor-not-allowed disabled:shadow-none">
                                 <span>Analyze Resume</span>
@@ -306,6 +523,26 @@
                             </button>
                         </div>
                     </div>
+                    <!-- LEFT: Results Navigation -->
+                    <div id="resultNav" class="hidden sticky top-24 bg-white/90 dark:bg-slate-900/90
+            border border-slate-200 dark:border-slate-800
+            rounded-2xl shadow-sm p-4 space-y-2">
+
+                        <h3 class="text-sm font-semibold mb-2">📌 Analysis Sections</h3>
+
+                        <button onclick="scrollToSection('resumeSummarySection')" class="nav-btn">🧠 Recruiter
+                            Snapshot</button>
+                        <button onclick="scrollToSection('coverLetterSection')" class="nav-btn">✉️ Tailored Cover
+                            Letter</button>
+                        <button onclick="scrollToSection('improvementSection')" class="nav-btn">📈 Resume Optimization
+                            Plan</button>
+                        <button onclick="scrollToSection('improvedResumeSection')" class="nav-btn">🤖 ATS-Optimized
+                            Resume</button>
+                        <button onclick="scrollToSection('qaSection')" class="nav-btn">🎤 Likely Interview
+                            Questions</button>
+                        <button onclick="scrollToSection('companyFitSection')" class="nav-btn">🏢 Company Fit
+                            Insights</button>
+                    </div>
 
                     <!-- RIGHT: Results -->
                     <div id="resultsSection"
@@ -313,10 +550,83 @@
 
                         <!-- Score + tags -->
                         <div class="grid sm:grid-cols-[auto,1fr] gap-4 items-start">
+                            <!-- ATS Score Breakdown -->
+                            <section class="space-y-2 mt-4">
+                                <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                                    ATS Score Breakdown
+                                </h3>
+
+                                <div class="space-y-2 text-xs">
+
+                                    <!-- Keyword Match -->
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="tooltip"
+                                                data-tip="Measures how well your resume keywords match the job description. Improve by adding exact JD terms naturally.">
+                                                Keyword Match
+                                            </span>
+                                            <span id="kwScore">0%</span>
+                                        </div>
+                                        <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded">
+                                            <div id="kwBar" class="h-2 bg-indigo-500 rounded" style="width:0%"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Skill Match -->
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="tooltip"
+                                                data-tip="Checks alignment between your skills and required role skills. Missing core tools reduce this score.">
+                                                Skill Match
+                                            </span>
+                                            <span id="skillScore">0%</span>
+                                        </div>
+                                        <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded">
+                                            <div id="skillBar" class="h-2 bg-emerald-500 rounded" style="width:0%">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Resume Structure -->
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="tooltip"
+                                                data-tip="Evaluates formatting, section order, and readability for ATS systems. Clean layouts score higher.">
+                                                Resume Structure
+                                            </span>
+                                            <span id="structureScore">0%</span>
+                                        </div>
+                                        <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded">
+                                            <div id="structureBar" class="h-2 bg-sky-500 rounded" style="width:0%">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- AI Fit -->
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="tooltip"
+                                                data-tip="AI-based assessment of role relevance using experience, keywords, and seniority signals.">
+                                                AI Role Fit
+                                            </span>
+                                            <span id="aiScore">0%</span>
+                                        </div>
+                                        <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded">
+                                            <div id="aiBar" class="h-2 bg-purple-500 rounded" style="width:0%"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+
+
+
                             <div class="flex flex-col items-center justify-center">
-                                <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1">
+                                <p class="tooltip text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1"
+                                    data-tip="Overall ATS compatibility score calculated from keywords, skills, structure, and role fit.">
                                     ATS Match Score
                                 </p>
+
                                 <div
                                     class="flex items-center justify-center rounded-full border-4 border-emerald-400/90 dark:border-emerald-400/80 h-24 w-24 bg-emerald-50/80 dark:bg-emerald-900/30 shadow-inner">
                                     <span id="scoreCircle"
@@ -341,52 +651,140 @@
                         </div>
 
                         <!-- Summary -->
-                        <section class="space-y-1">
-                            <div class="flex items-center justify-between gap-2">
-                                <h3 class="text-sm font-semibold">Resume Summary</h3>
-                            </div>
-                            <pre id="resumeSummary"
-                                class="whitespace-pre-wrap break-words text-xs md:text-sm bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2"></pre>
+                        <section class="result-card space-y-2 reveal-section" id="resumeSummarySection">
+                            <h3 class="text-sm font-semibold">
+                                Recruiter Snapshot
+                                <span class="text-xs text-slate-500 font-normal">
+                                    (What a recruiter understands in 15 seconds)
+                                </span>
+                            </h3>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                                Recruiters spend ~6–8 seconds scanning this section before deciding to read further.
+                            </p>
+
+                            <pre id="resumeSummary" class="whitespace-pre-wrap break-words text-xs md:text-sm
+              bg-slate-50 dark:bg-slate-900/60
+              border border-slate-200 dark:border-slate-800
+              rounded-lg p-3"></pre>
                         </section>
+
 
                         <!-- Cover Letter -->
-                        <section class="space-y-1">
-                            <div class="flex items-center justify-between gap-2">
-                                <h3 class="text-sm font-semibold">Cover Letter</h3>
-                            </div>
-                            <pre id="coverLetter"
-                                class="whitespace-pre-wrap break-words text-xs md:text-sm bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2"></pre>
+                        <section class="result-card space-y-2 reveal-section" id="coverLetterSection">
+                            <h3 class="text-sm font-semibold">
+                                Tailored Cover Letter
+                                <span class="text-xs text-slate-500 font-normal">
+                                    (Aligned to this job role)
+                                </span>
+                            </h3>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                                Recruiters can instantly spot generic cover letters — personalization improves response
+                                rates.</p>
+
+                            <pre id="coverLetter" class="whitespace-pre-wrap break-words text-xs md:text-sm
+              bg-slate-50 dark:bg-slate-900/60
+              border border-slate-200 dark:border-slate-800
+              rounded-lg p-3"></pre>
                         </section>
+
 
                         <!-- Action Plan -->
-                        <section class="space-y-1">
-                            <h3 class="text-sm font-semibold">Action Plan – How to Improve Your Resume</h3>
-                            <ul id="improvementList" class="list-decimal list-inside text-xs md:text-sm space-y-1"></ul>
+                        <section class="result-card space-y-2 reveal-section" id="improvementSection">
+                            <h3 <h3 class="text-sm font-semibold">
+                                Resume Optimization Plan
+                                <span class="text-xs text-slate-500 font-normal">
+                                    (Specific fixes to increase shortlisting)
+                                </span>
+                            </h3>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                                These improvements are based on ATS filters and recruiter shortlisting patterns.</p>
+
+                            <ul id="improvementList" class="list-disc pl-5 text-xs md:text-sm space-y-1"></ul>
                         </section>
+
 
                         <!-- Improved Resume -->
-                        <section class="space-y-1">
+                        <!-- AI-Rewritten ATS-Friendly Resume -->
+                        <section class="result-card space-y-2 reveal-section" id="improvedResumeSection">
+
                             <div class="flex items-center justify-between gap-2">
-                                <h3 class="text-sm font-semibold">AI-Rewritten ATS-Friendly Resume</h3>
+                                <h3 class="text-sm font-semibold">
+                                    ATS-Optimized Resume Draft
+                                    <span class="text-xs text-slate-500 font-normal">
+                                        (Keyword-aligned, recruiter-ready)
+                                    </span>
+                                </h3>
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                                    This version is rewritten to maximize keyword match while staying
+                                    recruiter-readable.
+                                </p>
+
+
+                                <button id="downloadPdfBtn" class="inline-flex items-center gap-2 rounded-xl
+             border border-slate-300 text-slate-700
+             px-3 py-1.5 text-xs font-semibold
+             hover:bg-slate-100
+             dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+                                    📄 Download ATS Resume (PDF – 1 Credit)
+                                </button>
                             </div>
-                            <pre id="improvedResume"
-                                class="whitespace-pre-wrap break-words text-xs md:text-sm bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2"></pre>
+
+                            <!-- ATS vs Human Toggle -->
+                            <div class="flex items-center gap-2 text-xs mb-2">
+                                <span class="text-slate-500">View:</span>
+
+                                <button id="atsViewBtn" class="toggle-btn active">
+                                    🤖 ATS View
+                                </button>
+
+                                <button id="humanViewBtn" class="toggle-btn">
+                                    👤 Human View
+                                </button>
+                            </div>
+
+
+                            <pre id="improvedResume" class="whitespace-pre-wrap break-words text-xs md:text-sm
+           bg-slate-50 dark:bg-slate-900/60
+           border border-slate-200 dark:border-slate-800
+           rounded-lg p-3">
+  </pre>
+
                         </section>
 
-                        <!-- Interview Q & A -->
-                        <section class="space-y-1">
-                            <h3 class="text-sm font-semibold">Interview Questions & Suggested Answers</h3>
-                            <ul id="questionsList" class="list-disc list-inside text-xs md:text-sm space-y-1"></ul>
-                            <ul id="qaList" class="list-disc list-inside text-xs md:text-sm space-y-2 mt-2"></ul>
+                        <section class="result-card space-y-2 reveal-section" id="qaSection">
+                            <h3 class="text-sm font-semibold">
+                                Likely Interview Questions
+                                <span class="text-xs text-slate-500 font-normal">
+                                    (Based on your resume & JD)
+                                </span>
+                            </h3>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                                Questions are generated based on your resume strengths, gaps, and the job description.
+                            </p>
+
+                            <div id="qaList" class="text-xs md:text-sm space-y-3"></div>
                         </section>
+
 
 
                         <!-- Company Fit -->
-                        <section class="space-y-1">
-                            <h3 class="text-sm font-semibold">Company-Specific Optimization Tips</h3>
-                            <pre id="companyFitNotes"
-                                class="whitespace-pre-wrap break-words text-xs md:text-sm bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2"></pre>
+                        <section class="result-card space-y-2 reveal-section" id="companyFitSection">
+                            <h3 class="text-sm font-semibold">
+                                Company Fit Insights
+                                <span class="text-xs text-slate-500 font-normal">
+                                    (How recruiters at this company evaluate profiles)
+                                </span>
+                            </h3>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400">
+                                Highlights how recruiters at this company typically evaluate candidates for this role.
+                            </p>
+
+                            <pre id="companyFitNotes" class="whitespace-pre-wrap break-words text-xs md:text-sm
+              bg-slate-50 dark:bg-slate-900/60
+              border border-slate-200 dark:border-slate-800
+              rounded-lg p-3"></pre>
                         </section>
+
                     </div>
 
 
@@ -395,6 +793,7 @@
             </div>
 
         </main>
+
 
 
 
@@ -481,15 +880,31 @@
 
 
         // RESET BUTTON
+        // 🔄 RESET BUTTON
         resetBtn.addEventListener("click", () => {
             document.getElementById("resumeFile").value = "";
             document.getElementById("resumeText").value = "";
             document.getElementById("jdText").value = "";
             document.getElementById("companyName").value = "";
+
+            // Hide results & nav
             resultsSection.classList.add("hidden");
+            document.getElementById("resultNav").classList.add("hidden");
+
+            // 🧹 STEP 3: Reset previous analysis state
+            window.atsResumeText = "";
+            window.humanResumeText = "";
+
+            // Remove reveal animations
+            document
+                .querySelectorAll(".reveal-section")
+                .forEach(sec => sec.classList.remove("visible"));
+
             statusDiv.textContent = "";
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
+
+
         document.getElementById("resumeFile").addEventListener("change", async function () {
             const file = this.files[0];
             const resumeError = document.getElementById("resumeError");
@@ -516,9 +931,12 @@
                 const response = await fetch("/extract-resume-text", {
                     method: "POST",
                     body: formData
+
                 });
 
                 const data = await response.json();
+
+
 
                 if (data.text) {
                     document.getElementById("resumeText").value = data.text;
@@ -529,6 +947,8 @@
                 resumeError.textContent = "Error reading resume file.";
             }
         });
+
+
 
 
         // ANALYZE BUTTON
@@ -544,8 +964,16 @@
 
             analyzeBtn.disabled = true;
             statusDiv.textContent = "Analyzing... please wait.";
-            resultsSection.classList.add("hidden");
+            // 🔁 STEP 4: reset reveal animations before new analysis
+            document
+                .querySelectorAll(".reveal-section")
+                .forEach(sec => sec.classList.remove("visible"));
 
+            resultsSection.classList.add("hidden");
+            startProgress();
+            document
+                .querySelectorAll(".reveal-section")
+                .forEach(sec => sec.classList.remove("visible"));
             try {
                 const response = await fetch("/analyze", {
                     method: "POST",
@@ -557,14 +985,104 @@
                     })
                 });
 
+
+                // BUY CREDITS BUTTON (stub for now)
+                document.getElementById("buyCreditsBtn").addEventListener("click", async () => {
+                    /* 🔥 ADD THIS FIRST */
+                    gtag("event", "paid_cta_clicked", {
+                        event_category: "Monetization",
+                        event_label: "Resume Audit ₹199"
+                    });
+                    try {
+                        const res = await fetch("/create-order", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ plan: "starter" })
+                        });
+
+                        const order = await res.json();
+
+
+                        if (!res.ok) {
+                            alert("Unable to create order");
+                            return;
+                        }
+
+                        const options = {
+                            key: order.key,
+                            amount: order.amount,
+                            currency: order.currency,
+                            name: "ResumeMatch AI",
+                            description: "5 Resume Analysis Credits",
+                            order_id: order.order_id,
+                            handler: async function (response) {
+                                const verifyRes = await fetch("/verify-payment", {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify(response)
+                                });
+
+                                const result = await verifyRes.json();
+
+                                if (result.success) {
+                                    document.getElementById("creditInfo").textContent =
+                                        `Remaining credits: ${result.total_credits}`;
+                                    alert("Payment successful! Credits added 🎉");
+                                } else {
+                                    alert("Payment verification failed");
+                                }
+                            },
+                            theme: { color: "#4f46e5" }
+                        };
+
+                        const rzp = new Razorpay(options);
+                        rzp.open();
+
+                    } catch (err) {
+                        console.error(err);
+                        alert("Payment failed");
+                    }
+                });
+
+
                 const data = await response.json();
 
+
                 if (!response.ok) {
+                    if (data.error === "no_credits") {
+                        document.getElementById("status").textContent =
+                            "Free limit reached. Buy credits to continue.";
+                        document.getElementById("buyCreditsBtn").classList.remove("hidden");
+                        return;
+                    }
                     throw new Error(data.error || "Server error");
                 }
 
                 // Fill UI
                 document.getElementById("scoreCircle").textContent = (data.match_score || 0) + "%";
+                // ATS SCORE BREAKDOWN UI
+                if (data.score_breakdown) {
+                    document.getElementById("kwScore").textContent =
+                        data.score_breakdown.keyword_match + "%";
+                    document.getElementById("kwBar").style.width =
+                        data.score_breakdown.keyword_match + "%";
+
+                    document.getElementById("skillScore").textContent =
+                        data.score_breakdown.skill_match + "%";
+                    document.getElementById("skillBar").style.width =
+                        data.score_breakdown.skill_match + "%";
+
+                    document.getElementById("structureScore").textContent =
+                        data.score_breakdown.resume_structure + "%";
+                    document.getElementById("structureBar").style.width =
+                        data.score_breakdown.resume_structure + "%";
+
+                    document.getElementById("aiScore").textContent =
+                        data.score_breakdown.ai_fit + "%";
+                    document.getElementById("aiBar").style.width =
+                        data.score_breakdown.ai_fit + "%";
+                }
+
 
                 const missingContainer = document.getElementById("missingSkills");
                 missingContainer.innerHTML = "";
@@ -595,30 +1113,107 @@
                     improvementList.appendChild(li);
                 });
 
-                document.getElementById("improvedResume").textContent = data.improved_resume || "";
+                // ✅ STORE resume versions FIRST
+                window.atsResumeText = data.improved_resume || "";
 
-                const qList = document.getElementById("questionsList");
-                qList.innerHTML = "";
-                (data.interview_questions || []).forEach(q => {
-                    const li = document.createElement("li");
-                    li.textContent = q;
-                    qList.appendChild(li);
-                });
+                // Human-friendly version (lighter formatting)
+                window.humanResumeText = window.atsResumeText
+                    .replace(/\n{2,}/g, "\n\n")
+                    .replace(/•/g, "–");
 
-                const qaList = document.getElementById("qaList");
-                qaList.innerHTML = "";
-                (data.interview_qa || []).forEach(item => {
-                    const li = document.createElement("li");
-                    const q = item.question || "";
-                    const a = item.answer || "";
-                    li.innerHTML = `<strong>Q:</strong> ${q}<br/><span class="text-slate-600 dark:text-slate-300"><strong>A:</strong> ${a}</span>`;
-                    qaList.appendChild(li);
-                });
+                // ✅ DEFAULT VIEW = ATS
+                const resumeBox = document.getElementById("improvedResume");
+                resumeBox.textContent = window.atsResumeText;
+
+                // Reset toggle state
+                document.getElementById("atsViewBtn")?.classList.add("active");
+                document.getElementById("humanViewBtn")?.classList.remove("active");
+
+
+
+                const qaEl = document.getElementById("qaList");
+                if (qaEl) {
+                    qaEl.innerHTML = "";
+
+                    (data.interview_qa || []).forEach(item => {
+                        const li = document.createElement("div");
+                        li.className = "space-y-1";
+
+                        const q = item.question || "";
+                        const a = item.answer || "";
+
+                        li.innerHTML = `
+      <p class="font-semibold">Q: ${q}</p>
+      <p class="text-slate-600 dark:text-slate-300">A: ${a}</p>
+    `;
+
+                        qaEl.appendChild(li);
+                    });
+                }
+
 
                 document.getElementById("companyFitNotes").textContent = data.company_fit_notes || "";
+                finishProgress(); // ✅ COMPLETE PROGRESS
+
+                /* ✅ STEP 4 — SECTION-BY-SECTION REVEAL */
+                resultsSection.classList.remove("hidden");
+
+                document.getElementById("resultNav").classList.remove("hidden");
+
+                const revealOrder = [
+                    "resumeSummarySection",
+                    "coverLetterSection",
+                    "improvementSection",
+                    "improvedResumeSection",
+                    "qaSection",
+                    "companyFitSection"
+                ];
+
+                revealOrder.forEach((id, index) => {
+                    setTimeout(() => {
+                        const el = document.getElementById(id);
+                        if (el) el.classList.add("visible");
+                    }, index * 250); // stagger animation
+                });
+                setTimeout(() => {
+                    scrollToSection("resumeSummarySection");
+                }, 200);
+
 
                 resultsSection.classList.remove("hidden");
+                document.querySelectorAll(".result-card").forEach((el, i) => {
+                    el.style.animationDelay = `${i * 80}ms`;
+                });
+
+                document.getElementById("resultNav").classList.remove("hidden");
+
+                // 🔥 Animated reveal (ATS-style)
+                const revealSections = document.querySelectorAll(".reveal");
+                revealSections.forEach((el, i) => {
+                    setTimeout(() => {
+                        el.classList.add("show");
+                    }, i * 120);
+                });
+
+
                 statusDiv.textContent = "Analysis completed ✅";
+                scrollToSection("resumeSummarySection");
+
+                /* 🔥 ADD THIS BELOW */
+                gtag("event", "resume_analyzed", {
+                    event_category: "ATS",
+                    event_label: "Resume Analysis Completed"
+                });
+                if (data.remaining_credits !== undefined) {
+                    const creditInfo = document.getElementById("creditInfo");
+                    creditInfo.textContent = `Remaining credits: ${data.remaining_credits}`;
+
+                    const buyBtn = document.getElementById("buyCreditsBtn");
+                    if (data.remaining_credits <= 0) {
+                        buyBtn.classList.remove("hidden");
+                    }
+                }
+
             } catch (err) {
                 console.error(err);
                 statusDiv.textContent = "Error: " + err.message;
@@ -626,6 +1221,175 @@
                 analyzeBtn.disabled = false;
             }
         });
+        document.getElementById("downloadPdfBtn").addEventListener("click", async () => {
+            try {
+                const resumeText = document.getElementById("improvedResume").textContent;
+
+                if (!resumeText) {
+                    alert("No resume available to download.");
+                    return;
+                }
+
+                const res = await fetch("/download-resume-pdf", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ resume_text: resumeText })
+                });
+
+                if (res.status === 402) {
+                    alert("No credits left. Please buy credits.");
+                    document.getElementById("buyCreditsBtn").classList.remove("hidden");
+                    return;
+                }
+
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "ATS_Optimized_Resume.pdf";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+
+                window.URL.revokeObjectURL(url);
+
+            } catch (err) {
+                console.error(err);
+                alert("PDF download failed.");
+            }
+        });
+
+        document.getElementById("emailForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById("emailInput").value.trim();
+            const status = document.getElementById("emailStatus");
+
+            if (!email) return;
+
+            try {
+                const res = await fetch("/subscribe", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email })
+                });
+
+                if (!res.ok) throw new Error();
+
+                status.textContent = "✅ Check your inbox soon!";
+                /* 🔥 ADD THIS HERE */
+                gtag("event", "email_subscribed", {
+                    event_category: "Lead",
+                    event_label: "Email CTA"
+                });
+                status.style.color = "green";
+            } catch {
+                status.textContent = "❌ Something went wrong.";
+                status.style.color = "red";
+            }
+        });
+
+        const sectionIds = [
+            "resumeSummarySection",
+            "coverLetterSection",
+            "improvementSection",
+            "improvedResumeSection",
+            "qaSection",
+            "companyFitSection"
+        ];
+
+        window.addEventListener("scroll", () => {
+            sectionIds.forEach(id => {
+                const section = document.getElementById(id);
+                const btn = document.querySelector(`[onclick*="${id}"]`);
+                if (!section || !btn) return;
+
+                const rect = section.getBoundingClientRect();
+                if (rect.top < 200 && rect.bottom > 200) {
+                    btn.classList.add("bg-slate-100", "dark:bg-slate-800");
+                } else {
+                    btn.classList.remove("bg-slate-100", "dark:bg-slate-800");
+                }
+            });
+        });
+
+        // 🔄 Progress Bar Controller
+        let progressInterval = null;
+
+        function startProgress() {
+            const wrapper = document.getElementById("progressWrapper");
+            const bar = document.getElementById("progressBar");
+            const label = document.getElementById("progressLabel");
+            const percent = document.getElementById("progressPercent");
+
+            let value = 0;
+            wrapper.classList.remove("hidden");
+
+            const stages = [
+                "Parsing resume...",
+                "Matching with job description...",
+                "Generating ATS insights...",
+                "Finalizing results..."
+            ];
+
+            progressInterval = setInterval(() => {
+                value += Math.floor(Math.random() * 8) + 4;
+                if (value > 90) value = 90;
+
+                bar.style.width = value + "%";
+                percent.textContent = value + "%";
+                label.textContent = stages[Math.floor(value / 25)] || stages[3];
+            }, 700);
+        }
+
+        function finishProgress() {
+            const bar = document.getElementById("progressBar");
+            const percent = document.getElementById("progressPercent");
+            const label = document.getElementById("progressLabel");
+
+            clearInterval(progressInterval);
+            bar.style.width = "100%";
+            percent.textContent = "100%";
+            label.textContent = "Analysis complete ✅";
+
+            setTimeout(() => {
+                document.getElementById("progressWrapper").classList.add("hidden");
+            }, 900);
+        }
+
+        const atsBtn = document.getElementById("atsViewBtn");
+        const humanBtn = document.getElementById("humanViewBtn");
+        const resumeBox = document.getElementById("improvedResume");
+
+        if (atsBtn && humanBtn && resumeBox) {
+            atsBtn.addEventListener("click", () => {
+                if (!window.atsResumeText) return;
+                resumeBox.textContent = window.atsResumeText;
+                atsBtn.classList.add("active");
+                humanBtn.classList.remove("active");
+            });
+
+            humanBtn.addEventListener("click", () => {
+                if (!window.humanResumeText) return;
+                resumeBox.textContent = window.humanResumeText;
+                humanBtn.classList.add("active");
+                atsBtn.classList.remove("active");
+            });
+
+        }
+
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            el.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+
     </script>
 
 </body>
