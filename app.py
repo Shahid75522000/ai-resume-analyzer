@@ -17,7 +17,7 @@ import time
 import csv
 
 import smtplib
-#DEV_MODE = False   # ✅ for local testing
+DEV_MODE = os.getenv("DEV_MODE", "false").lower() == "true"
 
 ADMIN_EMAIL = "admin@resumematch.ai"
 ADMIN_PASSWORD = "admin123"
@@ -802,7 +802,7 @@ def admin_dashboard():
 
 
 
-FREE_CREDITS = 5
+FREE_CREDITS = int(os.getenv("FREE_CREDITS", 3))
 
 def get_credits():
     # Initialize credits on first visit
